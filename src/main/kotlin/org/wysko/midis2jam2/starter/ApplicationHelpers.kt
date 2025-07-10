@@ -74,9 +74,9 @@ internal fun preferredResolution(): Resolution.CustomResolution =
     }
 
 private val DEFAULT_JME_SETTINGS = AppSettings(true).apply {
-    frameRate = -1
+    frameRate = 144
     GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.displayModes.firstOrNull()?.let {
-        frequency = it.refreshRate
+        frequency = 144
     }
     isVSync = true
     isResizable = false
