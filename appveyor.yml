@@ -1,0 +1,10 @@
+version: '{build}'
+branches:
+  only:
+  - master
+build_script:
+- ps: "Set-ExecutionPolicy Bypass -Scope Process -Force;\n\n$env:GIT_HASH = $env:APPVEYOR_REPO_COMMIT.Substring(0, 8) \n$env:JAVA_HOME = \"C:\\Program Files\\Java\\jdk21\"\n\n./gradlew shadowJar -P targetplatform=windows --info\n./gradlew shadowJar -P targetplatform=macos_x64 --info\n./gradlew shadowJar -P targetplatform=macos_arm64 --info\n./gradlew shadowJar -P targetplatform=linux_x64 --info\n./gradlew shadowJar -P targetplatform=linux_arm64 --info\n\nMove-Item -Path .\\build\\libs\\midis2jam2-windows-*.jar -Destination (\".\\build\\libs\\midis2jam2-windows-{0}.jar\" -f $env:GIT_HASH)\n\nMove-Item -Path .\\build\\libs\\midis2jam2-macos_x64-*.jar -Destination (\".\\build\\libs\\midis2jam2-macos_x64-{0}.jar\" -f $env:GIT_HASH)\n\nMove-Item -Path .\\build\\libs\\midis2jam2-macos_arm64-*.jar -Destination (\".\\build\\libs\\midis2jam2-macos_arm64-{0}.jar\" -f $env:GIT_HASH)\n\nMove-Item -Path .\\build\\libs\\midis2jam2-linux_x64-*.jar -Destination (\".\\build\\libs\\midis2jam2-linux_x64-{0}.jar\" -f $env:GIT_HASH)\n\nMove-Item -Path .\\build\\libs\\midis2jam2-linux_arm64-*.jar -Destination (\".\\build\\libs\\midis2jam2-linux_arm64-{0}.jar\" -f $env:GIT_HASH)"
+artifacts:
+- path: build/libs/*.jar
+  type: WebDeployPackage
+deploy: off
